@@ -32,6 +32,11 @@ Component({
                 count: count,
                 like: !like
             });
+            // 用于捕获当前点击事件的状态  是点赞还是取消
+            let behavior = this.properties.like?'like':'cancle'
+            this.triggerEvent('like',{
+                behavior:behavior
+            },{})
         }
     }
 })
