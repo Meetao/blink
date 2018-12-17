@@ -7,7 +7,7 @@ Component({
         index: {
             type:String,
             observer:function(newVal,oldVal,changeedPath){
-                let val = newVal<10?'0'+newVal:newVal
+                let val = newVal<10?newVal.padStart(2,'0'):newVal
                 this.setData({
                     _index: val
                 })

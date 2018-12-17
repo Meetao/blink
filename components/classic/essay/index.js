@@ -6,7 +6,7 @@ Component({
     behaviors:[classicBeh],
 
     properties: {
-       
+
     },
 
     /**

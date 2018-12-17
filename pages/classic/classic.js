@@ -11,12 +11,26 @@ Page({
      * 页面的初始数据
      */
     data: {
-        classic: null
+        classic: null,
+        first: false,
+        latest:true
     },
     onLike(e){
         console.log(e)
         let behavior = e.detail.behavior
         likeModel.like(behavior,this.data.classic.id,this.data.classic.type)
+    },
+    onNext(){
+        
+    },
+    onPrevious(e){
+        let index = this.data.classic.index
+        classicModel.getPrevious(index,(res) => {
+            //console.log(res)
+            this.setData({
+                classic:res
+            })
+        })
     },
     /**
      * 生命周期函数--监听页面加载
@@ -26,6 +40,7 @@ Page({
             this.setData({
                 classic: res
             })
+            console.log(res)
         })
     
     },
