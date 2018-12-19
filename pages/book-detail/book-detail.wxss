@@ -1,0 +1,62 @@
+.container {
+  background-color: #f5f5ff;
+  width: 100%;
+}
+.container .head {
+  background-color: #fff;
+  padding-top: 40rpx;
+  padding-bottom: 40rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.container .head .title {
+  color: #2f2f2f;
+  margin-top: 20rpx;
+  font-size: 38rpx;
+  font-weight: 600;
+}
+.container .head .author {
+  font-size: 28rpx;
+  color: #999;
+}
+.container .head image {
+  width: 200rpx;
+  height: 300rpx;
+  box-shadow: 2px 2px 3px #e3e3e3;
+}
+.container .sub-container {
+  width: 690rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 30rpx;
+  background-color: #fff;
+  padding: 30rpx;
+}
+.container .headline {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #2f2f2f;
+  margin-bottom: 20rpx;
+}
+.container .comment-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.container .comment-container v-tag {
+  margin-right: 15rpx;
+  margin-bottom: 10rpx;
+}
+.container .comment-container v-tag .num {
+  margin-left: 10rpx;
+  font-size: 22rpx;
+  color: #aaa;
+}
+.container .comment-container v-tag:nth-child(1) > view {
+  background-color: #fffbdd;
+}
+.container .comment-container v-tag:nth-child(2) > view {
+  background-color: #eefbff;
+}

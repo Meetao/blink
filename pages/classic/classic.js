@@ -1,6 +1,9 @@
-// pages/classic/classic.js
-import {ClassicModel} from '../../models/classic.js'
-import {LikeModel} from '../../models/like.js'
+import {
+    ClassicModel
+} from '../../models/classic.js'
+import {
+    LikeModel
+} from '../../models/like.js'
 
 let classicModel = new ClassicModel()
 let likeModel = new LikeModel()
@@ -13,24 +16,9 @@ Page({
     data: {
         classic: null,
         first: false,
-        latest:true
-    },
-    onLike(e){
-        console.log(e)
-        let behavior = e.detail.behavior
-        likeModel.like(behavior,this.data.classic.id,this.data.classic.type)
-    },
-    onNext(){
-        
-    },
-    onPrevious(e){
-        let index = this.data.classic.index
-        classicModel.getPrevious(index,(res) => {
-            //console.log(res)
-            this.setData({
-                classic:res
-            })
-        })
+        latest: true,
+        likeCount: 0,
+        likeStatus: false
     },
     /**
      * 生命周期函数--监听页面加载
@@ -38,11 +26,45 @@ Page({
     onLoad(options) {
         classicModel.getLatest((res) => {
             this.setData({
-                classic: res
+                classic: res,
+                likeCount: res.fav_nums,
+                likeStatus: res.like_status,
             })
             console.log(res)
         })
-    
+
+    },
+    onLike(e) {
+        console.log(e)
+        let behavior = e.detail.behavior
+        likeModel.like(behavior, this.data.classic.id, this.data.classic.type)
+
+    },
+    onNext() {
+        this._updateClassic('next')
+    },
+    onPrevious(e) {
+        this._updateClassic('previous')
+    },
+    _updateClassic(nextOrPrevious) {
+        let index = this.data.classic.index
+        classicModel.getClassic(index, nextOrPrevious, (res) => {
+            //console.log(res)
+            this._getLikeStatus(res.id, res.type)
+            this.setData({
+                classic: res,
+                latest: classicModel.isLatest(res.index),
+                first: classicModel.isFirst(res.index)
+            })
+        })
+    },
+    _getLikeStatus(artID, category) {
+        likeModel.getClassicLikeStatus(artID, category, (res) => {
+            this.setData({
+                likeCount: res.fav_nums,
+                likeStatus: res.like_status
+            })
+        })
     },
 
     /**
