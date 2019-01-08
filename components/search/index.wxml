@@ -2,24 +2,45 @@
     <view class="header">
         <view class="search-container">
             <image class="icon" src="images/search.png" />
-            <input class="bar" bind:confirm="onConfirm" placeholder="书籍名" placeholder-class="in-bar" auto-focus="true" />
-            <image class="cancel-img" src="images/cancel.png" />
+            <input class="bar" value="{{q}}" bind:confirm="onConfirm" placeholder="书籍名" placeholder-class="in-bar" auto-focus="true" />
+            <image class="cancel-img" bind:tap="onDelete" src="images/cancel.png" />
         </view>
         <view class="cancel" bind:tap="onCancel">取消</view>
     </view>
 
-    <view>
+    <view wx:if="{{!searching}}">
         <view class="history">
             <view class="title">
                 <view class="chunk"></view>
                 <text>历史搜索</text>
             </view>
+            <view class="tags">
+                <block wx:for="{{historyWords}}" wx:key="id">
+                    <v-tag bind:tapping="onConfirm" text="{{item}}" />
+                </block>
+            </view>
         </view>
         <view class="history hot-search">
-                <view class="title">
-                    <view class="chunk"></view>
-                    <text>热门搜索</text>
-                </view>
+            <view class="title">
+                <view class="chunk"></view>
+                <text>热门搜索</text>
             </view>
+            <view class="tags">
+                <block wx:for="{{hotWords}}" wx:key="id">
+                    <v-tag bind:tapping="onConfirm" text="{{item}}" />
+                </block>
+            </view>
+        </view>
     </view>
+
+    <view wx:if="{{searching}}" class="books-container">
+        <block wx:for="{{dataArray}}" wx:key="{{item.id}}">
+            <v-book class="book" book="{{item}}"  />
+        </block>
+    </view>
+    
+    <v-loading wx:if="{{loadingCenter}}" class="loading-center"/>
+    <v-loading wx:if="{{loading}}" class="loading" />
+
+    <text wx:if="{{noneResult}}" class="empty-tip">没有搜索到书籍</text>
 </view>

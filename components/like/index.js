@@ -1,4 +1,3 @@
-// components/like/index.js
 Component({
     /**
      * 组件的属性列表
@@ -9,6 +8,9 @@ Component({
         },
         count: {
             type: Number
+        },
+        readOnly: {
+            type: Boolean
         }
     },
 
@@ -25,6 +27,9 @@ Component({
      */
     methods: {
         onLike(e) {
+            if (this.properties.readOnly) {
+                return
+            }
             let like = this.properties.like
             let count = this.properties.count
             count = like ? count - 1 : count + 1
@@ -33,10 +38,10 @@ Component({
                 like: !like
             });
             // 用于捕获当前点击事件的状态  是点赞还是取消
-            let behavior = this.properties.like?'like':'cancle'
-            this.triggerEvent('like',{
-                behavior:behavior
-            },{})
+            let behavior = this.properties.like ? 'like' : 'cancle'
+            this.triggerEvent('like', {
+                behavior: behavior
+            }, {})
         }
     }
 })

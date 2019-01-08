@@ -1,7 +1,9 @@
-import { config } from '../config.js'
+import {
+    config
+} from '../config.js'
 
 const tips = {
-    1:'抱歉，出现了一个错误',
+    1: '抱歉，出现了一个错误',
     1005: 'appkey无效，请前往www.7yue.pro申请',
     3000: '期刊不存在'
 }
@@ -39,7 +41,7 @@ class HTTP {
     _show_error(error_code) {
         const tip = tips[error_code]
         wx.showToast({
-            title: tip?tips[error_code]:tips[1],
+            title: tip ? tips[error_code] : tips[1],
             icon: 'none',
             duration: 2000
         })

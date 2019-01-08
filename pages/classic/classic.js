@@ -8,8 +8,11 @@ import {
 let classicModel = new ClassicModel()
 let likeModel = new LikeModel()
 
-Page({
-
+Component({
+    properties: {
+        cid: Number,
+        type: Number
+    },
     /**
      * 页面的初始数据
      */
@@ -18,101 +21,78 @@ Page({
         first: false,
         latest: true,
         likeCount: 0,
-        likeStatus: false
+        likeStatus: false,
+        isJumped: false
     },
     /**
      * 生命周期函数--监听页面加载
      */
-    onLoad(options) {
-        classicModel.getLatest((res) => {
-            this.setData({
-                classic: res,
-                likeCount: res.fav_nums,
-                likeStatus: res.like_status,
+    attached(options) {
+        const cid = this.properties.cid
+        const type = this.properties.type
+        if (!cid) {
+            classicModel.getLatest((res) => {
+                this.setData({
+                    classic: res,
+                    likeCount: res.fav_nums,
+                    likeStatus: res.like_status
+                })
             })
-            console.log(res)
-        })
-
-    },
-    onLike(e) {
-        console.log(e)
-        let behavior = e.detail.behavior
-        likeModel.like(behavior, this.data.classic.id, this.data.classic.type)
-
-    },
-    onNext() {
-        this._updateClassic('next')
-    },
-    onPrevious(e) {
-        this._updateClassic('previous')
-    },
-    _updateClassic(nextOrPrevious) {
-        let index = this.data.classic.index
-        classicModel.getClassic(index, nextOrPrevious, (res) => {
-            //console.log(res)
-            this._getLikeStatus(res.id, res.type)
-            this.setData({
-                classic: res,
-                latest: classicModel.isLatest(res.index),
-                first: classicModel.isFirst(res.index)
+        } else {
+            classicModel.getById(cid, type, res => {
+                this._getLikeStatus(res.id, res.type)
+                this.setData({
+                    classic: res,
+                    latest: classicModel.isLatest(res.index),
+                    first: classicModel.isFirst(res.index)
+                })
             })
-        })
+            this._isJumped()
+        }
+
+
     },
-    _getLikeStatus(artID, category) {
-        likeModel.getClassicLikeStatus(artID, category, (res) => {
-            this.setData({
-                likeCount: res.fav_nums,
-                likeStatus: res.like_status
+    methods: {
+        onLike(e) {
+            console.log(e)
+            let behavior = e.detail.behavior
+            likeModel.like(behavior, this.data.classic.id, this.data.classic.type)
+
+        },
+        onNext() {
+            this._updateClassic('next')
+        },
+        onPrevious(e) {
+            this._updateClassic('previous')
+        },
+        _updateClassic(nextOrPrevious) {
+            let index = this.data.classic.index
+            classicModel.getClassic(index, nextOrPrevious, (res) => {
+                //console.log(res)
+                this._getLikeStatus(res.id, res.type)
+                this.setData({
+                    classic: res,
+                    latest: classicModel.isLatest(res.index),
+                    first: classicModel.isFirst(res.index)
+                })
             })
-        })
-    },
-
-    /**
-     * 生命周期函数--监听页面初次渲染完成
-     */
-    onReady() {
-
-    },
-
-    /**
-     * 生命周期函数--监听页面显示
-     */
-    onShow() {
-
-    },
-
-    /**
-     * 生命周期函数--监听页面隐藏
-     */
-    onHide() {
-
-    },
-
-    /**
-     * 生命周期函数--监听页面卸载
-     */
-    onUnload() {
-
-    },
-
-    /**
-     * 页面相关事件处理函数--监听用户下拉动作
-     */
-    onPullDownRefresh() {
-
-    },
-
-    /**
-     * 页面上拉触底事件的处理函数
-     */
-    onReachBottom() {
-
-    },
-
-    /**
-     * 用户点击右上角分享
-     */
-    onShareAppMessage() {
-
+        },
+        _getLikeStatus(artID, category) {
+            likeModel.getClassicLikeStatus(artID, category, (res) => {
+                this.setData({
+                    likeCount: res.fav_nums,
+                    likeStatus: res.like_status
+                })
+            })
+        },
+        _isJumped() {
+            if (this.properties.cid) {
+                this.setData({
+                    isJumped: true
+                })
+            }
+        }
     }
+
+
 })
